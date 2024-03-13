@@ -31,7 +31,7 @@
 #ifndef _SERVO_H_
 #define _SERVO_H_
 
-#include "types.h"
+// #include "types.h"
 #include "timer.h"
 
 #include "wiring.h"             /* hack for IDE compile */
@@ -123,11 +123,11 @@ public:
      * @return true if successful, false when pin doesn't support PWM.
      */
 
-    bool attach(uint8 pin,
-                uint16 minPulseWidth=MIN_PULSE_WIDTH,
-                uint16 maxPulseWidth=MAX_PULSE_WIDTH,
-                int16 minAngle=MIN_ANGLE,
-                int16 maxAngle=MAX_ANGLE);
+    bool attach(uint8_t pin,
+                uint16_t minPulseWidth=MIN_PULSE_WIDTH,
+                uint16_t maxPulseWidth=MAX_PULSE_WIDTH,
+                int16_t minAngle=MIN_ANGLE,
+                int16_t maxAngle=MAX_ANGLE);
     /**
      * @brief Stop driving the servo pulse train.
      *
@@ -158,7 +158,7 @@ public:
      *
      * @see Servo::attach()
      */
-    void writeMicroseconds(uint16 pulseWidth);
+    void writeMicroseconds(uint16_t pulseWidth);
 
     /**
      * Get the servomotor's target angle, in degrees. This will
@@ -174,7 +174,7 @@ public:
      *
      * @see Servo::attach()
      */
-    uint16 readMicroseconds() const;
+    uint16_t readMicroseconds() const;
 
 
     /**
@@ -193,11 +193,11 @@ public:
     int attachedPin() const { return this->pin; }
 
 private:
-    int16 pin;
-    uint16 minPW;
-    uint16 maxPW;
-    int16 minAngle;
-    int16 maxAngle;
+    int16_t pin;
+    uint16_t minPW;
+    uint16_t maxPW;
+    int16_t minAngle;
+    int16_t maxAngle;
 
     void resetFields(void);
 };

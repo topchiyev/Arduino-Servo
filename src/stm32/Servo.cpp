@@ -24,7 +24,7 @@
  * SOFTWARE.
  *****************************************************************************/
 
-#if defined(ARDUINO_ARCH_STM32G0)
+#if defined(ARDUINO_ARCH_STM32)
 
 #include "ServoTimers.h"
 
@@ -45,21 +45,21 @@
 #define TAU_USEC        (TAU_MSEC * 1000)
 #define TAU_CYC         (TAU_MSEC * CYC_MSEC)
 #define SERVO_PRESCALER (TAU_CYC / MAX_OVERFLOW + 1)
-#define SERVO_OVERFLOW  ((uint16)round((double)TAU_CYC / SERVO_PRESCALER))
+#define SERVO_OVERFLOW  ((uint16_t)round((double)TAU_CYC / SERVO_PRESCALER))
 
 // Unit conversions
-#define US_TO_COMPARE(us) ((uint16)map((us), 0, TAU_USEC, 0, SERVO_OVERFLOW))
+#define US_TO_COMPARE(us) ((uint16_t)map((us), 0, TAU_USEC, 0, SERVO_OVERFLOW))
 #define COMPARE_TO_US(c)  ((uint32)map((c), 0, SERVO_OVERFLOW, 0, TAU_USEC))
-#define ANGLE_TO_US(a)    ((uint16)(map((a), this->minAngle, this->maxAngle, \
+#define ANGLE_TO_US(a)    ((uint16_t)(map((a), this->minAngle, this->maxAngle, \
                                         this->minPW, this->maxPW)))
-#define US_TO_ANGLE(us)   ((int16)(map((us), this->minPW, this->maxPW,  \
+#define US_TO_ANGLE(us)   ((int16_t)(map((us), this->minPW, this->maxPW,  \
                                        this->minAngle, this->maxAngle)))
 
 Servo::Servo() {
     this->resetFields();
 }
 
-bool Servo::attach(uint8 pin, uint16 minPW, uint16 maxPW, int16 minAngle, int16 maxAngle)
+bool Servo::attach(uint8_t pin, uint16_t minPW, uint16_t maxPW, int16_t minAngle, int16_t maxAngle)
 {
     // SerialUSB.begin(115200);
     // SerialUSB.println(MAX_OVERFLOW);
@@ -140,7 +140,7 @@ bool Servo::detach() {
     }
 
     timer_dev *tdev = PIN_MAP[this->pin].timer_device;
-    uint8 tchan = PIN_MAP[this->pin].timer_channel;
+    uint8_t tchan = PIN_MAP[this->pin].timer_channel;
     timer_set_mode(tdev, tchan, TIMER_DISABLED);
 
     this->resetFields();
@@ -161,7 +161,7 @@ int Servo::read() const {
     return a == this->minAngle || a == this->maxAngle ? a : a + 1;
 }
 
-void Servo::writeMicroseconds(uint16 pulseWidth) {
+void Servo::writeMicroseconds(uint16_t pulseWidth) {
     if (!this->attached()) {
         ASSERT(0);
         return;
@@ -170,14 +170,14 @@ void Servo::writeMicroseconds(uint16 pulseWidth) {
     analogWrite(this->pin, US_TO_COMPARE(pulseWidth));
 }
 
-uint16 Servo::readMicroseconds() const {
+uint16_t Servo::readMicroseconds() const {
     if (!this->attached()) {
         ASSERT(0);
         return 0;
     }
 
     stm32_pin_info pin_info = PIN_MAP[this->pin];
-    uint16 compare = timer_get_compare(pin_info.timer_device,
+    uint16_t compare = timer_get_compare(pin_info.timer_device,
                                        pin_info.timer_channel);
 
     return COMPARE_TO_US(compare);
